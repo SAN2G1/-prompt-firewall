@@ -7,7 +7,7 @@ import numpy as np
 # 이 파일은 .gitignore에 등록된 'models/' 폴더에
 # 실제 모델 파일이 다운로드되어 있다고 가정함.
 MODEL_DIR = "models"
-PROTECTAI_PATH = os.path.join(MODEL_DIR, "protectai-deberta-v3-base")
+PROTECTAI_PATH = os.path.join(MODEL_DIR, "protectai-deberta-v3-base", "onnx")
 SENTINEL_PATH = os.path.join(MODEL_DIR, "prompt-injection-sentinel")
 
 class Stage2Scorer:
