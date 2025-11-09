@@ -1,0 +1,16 @@
+# Python 가상 환경
+venv/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+
+# [cite_start]데이터셋 및 모델 (대용량) [cite: 36, 37]
+data/
+models/
+*.onnx

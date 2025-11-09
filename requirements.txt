@@ -1,0 +1,18 @@
+# [cite_start]1. API 서버 (프록시) [cite: 30]
+fastapi
+uvicorn[standard]
+
+# [cite_start]2. 1단계 규칙 로딩용 [cite: 31]
+PyYAML
+
+# [cite_start]3. 1단계 정규식 라이브러리 [cite: 32]
+regex
+
+# [cite_start]4. 2단계 모델 추론용 [cite: 33, 34]
+onnxruntime
+transformers
+
+# [cite_start]5. 6단계 평가용 [cite: 65, 69]
+pandas
+scikit-learn
+matplotlib
