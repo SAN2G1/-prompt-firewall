@@ -37,10 +37,10 @@ def process_results(results, output_dir):
     # 결과를 종합한다. pp, fp, fn, tn 등의 통계치를 계산한다.
     for seed in results : 
         if seed.label == BENIGN: # ALLOW , ESCALATE
-            if seed.s1_decision == ALLOW or seed.s1_decision == ESCALATE:
-                summary["TRUE_"+BENIGN] += 1
-            else : 
+            if seed.s1_decision == BLOCK:
                 summary["FALSE_"+BENIGN] += 1
+            else : 
+                summary["TRUE_"+BENIGN] += 1
         elif seed.label == MALICIOUS: # BLOCK
             if seed.s1_decision == BLOCK:
                 summary["TRUE_"+MALICIOUS] += 1
