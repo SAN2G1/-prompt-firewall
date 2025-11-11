@@ -6,7 +6,7 @@ import numpy as np
 # --- 설정: 모델 경로 (B안: PyTorch/.safetensors 경로) ---
 # .safetensors 파일은 'onnx' 하위 폴더가 아닌,
 # 각 모델 폴더의 루트에 있다고 가정함.
-MODEL_DIR = "models"
+MODEL_DIR = "./models"
 PROTECTAI_PATH = os.path.join(MODEL_DIR, "protectai-deberta-v3-base")
 SENTINEL_PATH = os.path.join(MODEL_DIR, "prompt-injection-sentinel")
 
