@@ -15,7 +15,7 @@ MALICIOUS = "jailbreak"
 ALLOW = "ALLOW"
 BLOCK = "BLOCK"
 ESCALATE = "ESCALATE"
-
+REWRITE = "REWRITE"
 
 def process_results(results, output_dir, stage_name):
     """
@@ -29,10 +29,7 @@ def process_results(results, output_dir, stage_name):
 
     summary = {
         "Total Seeds": len(results),
-        "PASS_" + BENIGN: 0,
-        "PASS_" + MALICIOUS: 0,
-        "BLOCK_" + BENIGN: 0,
-        "BLOCK_" + MALICIOUS: 0
+
     }
 
     decision_attr = ""
@@ -48,16 +45,15 @@ def process_results(results, output_dir, stage_name):
         # getattr을 사용하여 동적으로 s1_decision 또는 s2_decision 값을 가져옵니다.
         check_decision = getattr(seed, decision_attr, None)
 
-        if seed.label == BENIGN:
-            if check_decision == BLOCK:
-                summary["BLOCK_" + BENIGN] += 1
-            else:
-                summary["PASS_" + BENIGN] += 1
-        elif seed.label == MALICIOUS:
-            if check_decision == BLOCK:
-                summary["BLOCK_" + MALICIOUS] += 1
-            else:
-                summary["PASS_" + MALICIOUS] += 1
+        if check_decision not in [ALLOW, ESCALATE, BLOCK, REWRITE ]:
+            continue  # 유효하지 않은 결정은 무시합니다.
+
+        summary_key = f"{check_decision}_{seed.label}"
+        if summary_key in summary:
+            summary[summary_key] += 1
+        else:
+            summary[summary_key] = 1 
+
 
     return summary
 
