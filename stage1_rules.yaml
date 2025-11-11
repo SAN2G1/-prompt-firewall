@@ -1,12 +1,16 @@
-# 1단계 규칙: OWASP Top 10 for LLM 및 NeMo Guardrails 기반 정규식 룰셋
-# -----------------------------------------------------------------
-# action: 'block' -> 1단계에서 즉시 차단
-# action: 'escalate' -> 1단계에서 판단 불가, 2단계(ML)로 이관하여 위험도 판정
+# 1. 화이트리스트 (즉시 ALLOW, S2 스킵)
+# 명백히 안전하고 빠른 응답이 필요한 일반 질의
+whitelist:
+  - id: W1_SIMPLE_Q
+    pattern: '(?i)^(what|who|when|where|why|how)\s+(is|are|to|does|do)\b'
+    action: allow
+  - id: W2_SUMMARIZE
+    pattern: '(?i)^(summarize|explain)\b'
+    action: allow
 
-# stage1_rules.yaml 파일에는 ALLOW 항목이 있을 필요가 없음.
-# stage1_rules.yaml 파일은 "무엇이 위험한가?" (블랙리스트/에스컬레이션 리스트)를 정의.
-
-rules:
+# 2. 블랙리스트 (BLOCK 또는 ESCALATE)
+# (기존 R1 ~ R10 규칙)
+blacklist:
   - id: R1_SYS_LEAK
     name: Block system prompt leak
     pattern: '(?i)\b(?:(?:show|reveal|display|print|provide|give|tell(?:\s+me)?|expose|what\s+(?:is|are)|what''s)\b.*\b(?:system\s*prompt|hidden\s*(?:policy|rules?|instructions|guidelines)|internal\s*(?:instructions|policy|policies)|developer\s*message|system\s*instructions|initial\s*instructions))'
@@ -22,13 +26,13 @@ rules:
   - id: R3_ROLE_PLAY
     name: Escalate role switch
     pattern: '(?i)\b(?:you are now|from now on\s*[,]?\s*you are|act as(?!\s*though)(?!\s*if)|pretend to be|pretend you are|assume the role of|take on the role of|play the role of|please play the role of|become)\b'
-    action: escalate
+    action: escalate # 'review'를 'escalate'로 변경 (2단계 이관)
     message: "Role-play request detected; escalating to Stage 2."
 
   - id: R4_AUTO_EXEC
     name: Escalate auto-execution
     pattern: '(?i)\b(?:(?:run|execute)\b.*\b(?:code|script|program|command)|(?:open|launch)\b.*\b(?:file|program|application|app|site|website|link|url)|(?:click|follow)\b.*\b(?:link|url|hyperlink|site|website))'
-    action: escalate
+    action: escalate # 'review'를 'escalate'로 변경
     message: "Automated execution command detected; escalating to Stage 2."
 
   - id: R5_SENSITIVE_INFO
@@ -46,7 +50,7 @@ rules:
   - id: R7_FULL_CONTENT
     name: Escalate full content request
     pattern: '(?i)\b(?:(?:show|display|provide|print|give|output)\b.*\b(?:(?:entire|full|whole|complete|original)\b.*\b(?:text|content|document|article|email|message)|verbatim|raw\s+text|raw\s+content|exactly\s+as)|no\s+summary|verbatim)\b'
-    action: escalate
+    action: escalate # 'review'를 'escalate'로 변경
     message: "Full content output request detected; escalating to Stage 2."
 
   - id: R8_FILTER_BYPASS
@@ -64,5 +68,5 @@ rules:
   - id: R10_EXCESSIVE_CONTENT
     name: Escalate excessive code/links
     pattern: '(?s)(?:```.*?```.*?```|(?:(?:https?://)\S+\s*){3,})'
-    action: escalate
+    action: escalate # 'review'를 'escalate'로 변경
     message: "Excessive code/links detected; escalating to Stage 2."
